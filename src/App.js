@@ -6,12 +6,25 @@ import './App.css';
 function App() {
 
   const [hotels, setHotels] = useState(data);
-  const [showMore, setShowMore] = useState(false);
+ 
 
   const removeHotel = (id) => {
     let newHotels = hotels.filter((hotel) => hotel.id !== id);
     setHotels(newHotels);
   }
+  
+  const setShowMore = (id) => {
+    const newHotels = [];
+    hotels.forEach((hotel) => {
+      if (hotel.id === id) {
+        const changedHotel = { ...hotel, showMore: !hotel.showMore };
+        newHotels.push(changedHotel);
+      } else {
+        newHotels.push(hotel);
+      }
+    });
+    setHotels(newHotels);
+  };
 
   return (
     <div>
@@ -19,7 +32,7 @@ function App() {
         <h1>NYS TOP {hotels.length} HOTELS</h1>
       </div>
       { hotels.map ((hotel => {
-        const { id, hotelName, description, image, source } = hotel;
+        const { id, hotelName, description, image, showMore, source } = hotel;
         return (
           <div key={id}>
             <div className="container">
@@ -29,9 +42,11 @@ function App() {
             </div>
             <div className="container">
               <p>
-                {showMore ? description : description.substring(0, 260) + "..."}
-                <button onClick={() => setShowMore(!showMore)}>
-                  {showMore ? "Show less" : "Show more"}git init
+                {showMore
+                  ? description
+                  : description.substring(0, 220) + " ...."}
+                <button onClick={() => setShowMore(id)}>
+                  {showMore ? "Show less" : "Show more"}
                 </button>
               </p>
             </div>
